@@ -31,7 +31,15 @@ h1 {
   align-items: center; }
 
 button {
-  margin: 2rem 4rem; }
+  margin: 2rem 4rem;
+  background-color: #ff80d5;
+  border: none;
+  color: white;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 4px; }
+  button:hover {
+    background-color: lightgrey; }
 
 #map {
   height: 15rem;

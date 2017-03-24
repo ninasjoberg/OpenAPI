@@ -16,19 +16,22 @@
 	<main class="maincontent">
 		<section class="buttons row">
 			<button id="location">get location</button>
-			<button id="weather">show weather</button>
+			<button id="weather">get weather</button>
 		</section>
 		<section class="info">	
 			<h3 id="location-div">location</h3>
 			<h3 id="weather-div">weather</h3>
 			<h3 id="activity">aktivitetsförslag</h3>
-			<button>Oh no, it's raining. Give me a cafe nearby!</button>
+			<button id ="cafe">Oh no, it's raining. Give me a cafe nearby!</button>
+			<button>just give me a cinema nearby!!</button>
 		</section>
 		<div id="map"></div>
 	</main>	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch-jsonp/1.0.6/fetch-jsonp.min.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbirmRfdWYeiuZ7R0sfBWsRzcS4Gsm-4c&callback=initMap">
-    </script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg&libraries=places"></script>
+
+	<!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbirmRfdWYeiuZ7R0sfBWsRzcS4Gsm-4c&callback=initMap">
+    </script> -->
 	<script type="text/javascript" src="js/main.js"></script>
 
 
