@@ -1,3 +1,4 @@
 .sass-cache/
 *.css.map
 api_key
+node_modules
