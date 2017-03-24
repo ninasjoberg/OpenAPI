@@ -1,7 +1,7 @@
 
 
 $primary-color: #1fccba; 
-$secondary-colro: pink;
+$secondary-color: #ff80d5;
 
 
 
@@ -45,6 +45,15 @@ h1{
 
 button{
 	margin: 2rem 4rem;
+	background-color: $secondary-color;
+	border: none;
+	color: white;
+	padding: 1rem;
+	font-size: 1rem;
+	border-radius: 4px;
+	&:hover{
+		background-color: lightgrey;
+	}
 }
 
 #map{
