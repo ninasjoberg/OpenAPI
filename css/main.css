@@ -12,7 +12,7 @@ body {
 
 h1 {
   font-size: 3rem;
-  margin: 5rem auto;
+  margin: 0 auto 5rem auto;
   color: white; }
 
 input {
@@ -26,6 +26,25 @@ input {
   display: flex;
   flex-direction: column;
   align-items: center; }
+
+.visibility {
+  visibility: hidden; }
+
+#loader {
+  align-self: flex-end;
+  margin: 2rem 2rem 0 0;
+  border: 12px solid lightgrey;
+  border-top: 12px solid #ff80d5;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  animation: spin 2s linear infinite; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
 
 .info-text {
   border: 1px solid black;
@@ -45,11 +64,6 @@ button {
 
 #icon {
   height: 6rem; }
-
-.mapp-buttons {
-  display: flex;
-  flex-direction: row;
-  margin-top: 4rem; }
 
 #map {
   height: 10rem;

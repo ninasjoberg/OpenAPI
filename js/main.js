@@ -29,7 +29,7 @@ let api = (function(){
 		.then(function(json){ //promises , kan döpas till vad som helst
 			console.log(json);
 			if(json.cod == 404 || json.cod == 504){
-				console.log('We could not find a city called' + city);
+				console.log(`We could not find a city called ${city}`);
 			}
 			return json;
 		})
@@ -37,6 +37,34 @@ let api = (function(){
 			console.log(error); //loggar ut error om det skulle uppstå
 		});
 	};
+
+		//get data from OpenWeatherMap's api
+		const showMap = function(){
+		return fetch('https://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg&callback=initMap',
+			{
+				mode: 'no-cors',
+			})
+		.then(function(response){ //promises
+			console.log(response);
+			return response;
+		})
+		.catch(function(error){
+			console.log(error); //loggar ut error om det skulle uppstå
+		});
+	};
+
+
+	function initMap() {
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
 
 
 	//get data from OpenWeatherMap's api
@@ -55,6 +83,7 @@ let api = (function(){
 	return{
 		getWeatherInfoByLocation: getWeatherInfoByLocation,
 		getWeatherInfoByCity: getWeatherInfoByCity,
+		showMap: showMap,
 		getMap: getMap,
 	};
 
@@ -66,6 +95,7 @@ let api = (function(){
 
 let event = (function(){
 	document.getElementById('weather').addEventListener('click', getWeather);
+	document.getElementById('map-button').addEventListener('click', getMap);
 
 	//get the users location
 	function getLocation(){
@@ -86,22 +116,59 @@ let event = (function(){
 	function getWeather(){
 		const cityInput = document.getElementById('add-city').value;
 		if(!cityInput){
+			 let loader = document.getElementById('loader');
+   			 loader.classList.toggle('visibility');
 			getLocation().then((data) => {
 				const weaterLoc = api.getWeatherInfoByLocation(data.lat, data.lon);
-				console.log(weaterLoc);
 				weaterLoc.then(function(json){
-					console.log(json);
-					presentation.toDom(json.name, json.weather[0].main, json.main.temp);
+					presentation.toDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 					presentation.iconToDom(json.weather[0].icon);
+					activityTip(json.weather[0].description, json.main.temp, json.wind.speed);
+					loader.classList.toggle('visibility');
 				})
  			})		
 		}else{
 			const weather = api.getWeatherInfoByCity(cityInput);
 			weather.then(function(json){
-				presentation.toDom(json.name, json.weather[0].main, json.main.temp);
+				presentation.toDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 				presentation.iconToDom(json.weather[0].icon);
+				activityTip(json.weather[0].description, json.main.temp, json.wind.speed);
 			})
 		}
+	}
+
+
+	//show activity based on weather
+	function activityTip(weather, temp, wind){
+		let text = '';
+		if(temp > 9 && temp < 19 && weather == 'clear sky' && wind < 5){
+			text = `for a walk outside!`;
+		}
+		else if(temp > 9 && temp < 16 && wind < 5 && weather == 'clear sky' || weather == 'few clouds'){
+			text = `for outdoor climbing`;
+		}
+		else if(temp > 18 && wind > 5 && wind < 12 && weather == 'clear sky' || weather == 'few clouds'){
+			text = `for sailing`;
+		}
+		else if(wind > 3 && temp > 20){
+			text = `to take a swim`;
+		}
+		else if(temp < 0 && weather == 'clear sky' || weather == 'few clouds'){
+			text = `skiing or sledding (if it's snow)`;
+		}
+		else if(weather == 'rain' || weather == 'thunderstorm'){
+			text = `to stay inside and watch a movie`;
+		}
+		else{
+			text= `for programming`;
+		}
+		presentation.activityToDom(text);	
+	}
+
+
+	function getMap(){
+		const mapImg = api.showMap();
+		presentation.mapToDom(mapImg);
 	}
 
 
@@ -109,31 +176,64 @@ let event = (function(){
 		getWeather: getWeather,
 	};
 
-
 })();	
+
 
 
 
 let presentation = (function(){		
 
-	function toDom(location, weather, temp){
+	function toDom(location, weather, temp, wind){
 		const weatherDiv = document.getElementById('weather-div');
-		weatherDiv.innerHTML = location + ' - ' + weather + ' - ' + temp +'°C';
+		weatherDiv.innerHTML = `${location} ${weather} ${temp}°C ${wind}m/s`;
 	}
 
 	function iconToDom(id){
 		document.getElementById('icon').src='http://openweathermap.org/img/w/' + id + '.png';
 	}
 
+	function activityToDom(text){
+		const activity = document.getElementById('activity');
+		activity.innerHTML = `It's a great day ${text}`;
+	}
+
+	function mapToDom(map){
+		const mapPic = document.getElementById('map');
+		mapPic.innerHTML = map;
+	}
+
 
 	return{
 		toDom: toDom,
 		iconToDom: iconToDom,
-		};
-
+		activityToDom: activityToDom,
+		mapToDom: mapToDom,
+	};
 
 })();	
 
 
-api.getWeatherInfoByCity(Stockholm);
+
+//event.getWeather();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
