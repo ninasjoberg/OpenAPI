@@ -32,11 +32,13 @@ let api = (function(){
 
 		//get data from GoogleMap's api
 		const showMap = function(){
-		return fetch('http://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg',
+		return fetch('https://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg',
 			{
 				mode: 'no-corse'
 			})
 		.then(function(response){ //promises
+			console.log(response);
+			console.log(response.json);
 			console.log(response.blob());
 			const resp = (response.blob());
 			return resp;
