@@ -5,35 +5,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title></title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
-
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
 	<h1>Activity tips!</h1>
 	<main class="maincontent">
-		<section class="buttons row">
-			<button id="location">get location</button>
-			<button id="weather">get weather</button>
-		</section>
-		<section class="info">	
-			<h3 id="location-div">location</h3>
-			<h3 id="weather-div">weather</h3>
-			<h3 id="activity">aktivitetsförslag</h3>
-			<button id ="cafe">Oh no, it's raining. Give me a cafe nearby!</button>
-			<button>just give me a cinema nearby!!</button>
+		<div class="info-text">
+			<p>Write a location in the inputfiled and press the button '"get weather". Or just press the button and you will get the weather based on you actual location. 
+			</p>	
+		</div>	
+		<input id="add-city" type="text" value="" placeholder=" Location" required="" autofocus></input>
+		<button id="weather">get weather</button>
+		<h3 id="weather-div">City - Weather - °C</h3>
+		<img id="icon" src="" alt="weather-icon">
+		<section class="mapp-buttons">
+			<button id="map1">get map one</button>
+			<button id="map2">get map two</button>
 		</section>
 		<div id="map"></div>
 	</main>	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch-jsonp/1.0.6/fetch-jsonp.min.js"></script>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg&libraries=places"></script>
 
-	<!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbirmRfdWYeiuZ7R0sfBWsRzcS4Gsm-4c&callback=initMap">
-    </script> -->
+
 	<script type="text/javascript" src="js/main.js"></script>
-
-
 </body>
 </html>
