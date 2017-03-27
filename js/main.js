@@ -2,7 +2,7 @@ let api = (function(){
 
 	//get data from OpenWeatherMap's api
 	const getWeatherInfoByLocation = function(lat, lon){
-		return fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
+		return fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promises
 			return response.json();
 		})
@@ -14,7 +14,7 @@ let api = (function(){
 
 	//get data from OpenWeatherMap's api
 	const getWeatherInfoByCity = function(city){
-		return fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
+		return fetch('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promises
 			return response.json();
 		})
@@ -32,20 +32,21 @@ let api = (function(){
 
 		//get data from GoogleMap's api
 		const showMap = function(){
-		return fetch('https://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg',
+		return fetch('http://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg',
 			{
-				mode: 'no-cors',
+				mode: 'no-corse'
 			})
 		.then(function(response){ //promises
-			console.log(response);
-			return response;
+			console.log(response.blob());
+			const resp = (response.blob());
+			return resp;
 		})
 		.catch(function(error){
 			console.log(error); //loggar ut error om det skulle uppstå
 		});
 	};
 
-
+/*
 	//get data from OpenWeatherMap's api
 	const getMap = function(){
 		fetch('https://tile.openweathermap.org/map/Temperature/59/17/3.png?appid=86ebed830d86568ba6fe8e800be02b58')
@@ -56,14 +57,14 @@ let api = (function(){
 			console.log(error); //loggar ut error om det skulle uppstå
 		});
 	};
-
+*/
 
 
 	return{
 		getWeatherInfoByLocation: getWeatherInfoByLocation,
 		getWeatherInfoByCity: getWeatherInfoByCity,
 		showMap: showMap,
-		getMap: getMap,
+		//getMap: getMap,
 	};
 
 
@@ -146,23 +147,9 @@ let event = (function(){
 
 
 	function getMap(){
-		const mapImg = api.showMap();
-		//presentation.mapToDom(mapImg);
-		initMap();
+		const mapImg = api.showMap(); //får jag ut en bild här?? i så fall sätt den till img src istället för innerHtml
+		presentation.mapToDom(mapImg);
 	}
-
-
-	function initMap() {
-        var uluru = {lat: -25.363, lng: 131.044};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: uluru
-        });
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
-      }
 
 
 
@@ -191,18 +178,18 @@ let presentation = (function(){
 		activity.innerHTML = `It's a great day ${text}`;
 	}
 
-/*
+
 	function mapToDom(map){
 		const mapPic = document.getElementById('map');
-		mapPic.innerHTML = map;
+		mapPic.innerHTML = map; 
 	}
-*/
+
 
 	return{
 		infoToDom: infoToDom,
 		iconToDom: iconToDom,
 		activityToDom: activityToDom,
-		//mapToDom: mapToDom,
+		mapToDom: mapToDom,
 	};
 
 })();	
