@@ -1,16 +1,8 @@
-
-//Endpoint for any API calls
-//api.openweathermap.org
-
-//Example of API call
-//api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=86ebed830d86568ba6fe8e800be02b58
-
-
 let api = (function(){
 
 	//get data from OpenWeatherMap's api
 	const getWeatherInfoByLocation = function(lat, lon){
-		return fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
+		return fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promises
 			return response.json();
 		})
@@ -22,7 +14,7 @@ let api = (function(){
 
 	//get data from OpenWeatherMap's api
 	const getWeatherInfoByCity = function(city){
-		return fetch('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
+		return fetch('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promises
 			return response.json();
 		})
@@ -38,9 +30,9 @@ let api = (function(){
 		});
 	};
 
-		//get data from OpenWeatherMap's api
+		//get data from GoogleMap's api
 		const showMap = function(){
-		return fetch('https://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg&callback=initMap',
+		return fetch('https://maps.googleapis.com/maps/api/js?key=AIzaSyAb3Sw65iQ9LaN9gV8irmQzv-Qr_fuveFg',
 			{
 				mode: 'no-cors',
 			})
@@ -54,22 +46,9 @@ let api = (function(){
 	};
 
 
-	function initMap() {
-        var uluru = {lat: -25.363, lng: 131.044};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: uluru
-        });
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
-      }
-
-
 	//get data from OpenWeatherMap's api
 	const getMap = function(){
-		fetch('http://tile.openweathermap.org/map/Temperature/59/17/3.png?appid=86ebed830d86568ba6fe8e800be02b58')
+		fetch('https://tile.openweathermap.org/map/Temperature/59/17/3.png?appid=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promise
 			return response.json();
 		})
@@ -121,7 +100,7 @@ let event = (function(){
 			getLocation().then((data) => {
 				const weaterLoc = api.getWeatherInfoByLocation(data.lat, data.lon);
 				weaterLoc.then(function(json){
-					presentation.toDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
+					presentation.infoToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 					presentation.iconToDom(json.weather[0].icon);
 					activityTip(json.weather[0].description, json.main.temp, json.wind.speed);
 					loader.classList.toggle('visibility');
@@ -130,7 +109,7 @@ let event = (function(){
 		}else{
 			const weather = api.getWeatherInfoByCity(cityInput);
 			weather.then(function(json){
-				presentation.toDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
+				presentation.infoToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 				presentation.iconToDom(json.weather[0].icon);
 				activityTip(json.weather[0].description, json.main.temp, json.wind.speed);
 			})
@@ -168,8 +147,23 @@ let event = (function(){
 
 	function getMap(){
 		const mapImg = api.showMap();
-		presentation.mapToDom(mapImg);
+		//presentation.mapToDom(mapImg);
+		initMap();
 	}
+
+
+	function initMap() {
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+
 
 
 	return{
@@ -183,7 +177,7 @@ let event = (function(){
 
 let presentation = (function(){		
 
-	function toDom(location, weather, temp, wind){
+	function infoToDom(location, weather, temp, wind){
 		const weatherDiv = document.getElementById('weather-div');
 		weatherDiv.innerHTML = `${location} ${weather} ${temp}°C ${wind}m/s`;
 	}
@@ -197,24 +191,29 @@ let presentation = (function(){
 		activity.innerHTML = `It's a great day ${text}`;
 	}
 
+/*
 	function mapToDom(map){
 		const mapPic = document.getElementById('map');
 		mapPic.innerHTML = map;
 	}
-
+*/
 
 	return{
-		toDom: toDom,
+		infoToDom: infoToDom,
 		iconToDom: iconToDom,
 		activityToDom: activityToDom,
-		mapToDom: mapToDom,
+		//mapToDom: mapToDom,
 	};
 
 })();	
 
 
 
-//event.getWeather();
+const initialWeather = api.getWeatherInfoByCity('Stockholm');
+	initialWeather.then(function(json){
+		presentation.infoToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
+		presentation.iconToDom(json.weather[0].icon);
+	})
 
 
 
