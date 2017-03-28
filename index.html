@@ -11,21 +11,37 @@
 </head>
 <body>
 	<div id ="loader" class="visibility"></div>
-	<h1>Activity tips!</h1>
+	<h1>Good Morning</h1>
+	<p class="white">The best way to start your day!</p>
 	<main class="maincontent">
-		<div class="info-text">
-			<p>Write a location in the inputfiled and press the button '"get weather". Or just press the button and you will get the weather based on you actual location. 
-			</p>	
-		</div>	
-		<input id="add-city" type="text" value="" placeholder=" Location" required="" autofocus></input>
-		<button id="weather">get weather</button>
-		<h3 id="weather-div">City - Weather - °C</h3>
-		<img id="icon" src="" alt="weather-icon">
-		<p id="activity">It's always a great day for programming!</p>
-		<section class="mapp-buttons">
-			<button id="map-button">get map</button>
-			<div id="map"></div>
-			<!--<img id="map" src=""> -->
+		<section class="weather column">
+			<h3>Todays weather</h3>
+			<div class="info-text">
+				<p>Write a location in the inputfiled and press the button '"get weather". Or just press the button and you will get the weather based on you actual location. 
+				</p>	
+			</div>	
+			<input id="add-city" type="text" value="" placeholder=" Location" required="" autofocus></input>
+			<button id="weather-button">Get weather</button>
+			<h3 id="location-div"></h3>
+			<h4 id="weather-div"></h4>
+			<img id="icon" src="" alt="weather-icon">
+			<p id="activity">It's always a great day for programming!</p>
+		</section>
+		<section class="news column">
+			<h3>'Almost' latest news:</h3>
+			<div id="date"></div>
+			<p class="text">the Times</p>
+			<div class ="area">
+				<h4 id="heading"></h4>
+				<div id="article"></div>
+				<a id="link" href=""></a>
+			</div>
+			<button id="news-button">Update news</button>
+		</section>
+		<section class="cat column">
+			<h3>Cat of the day</h3>
+			<button id="cat-button">Give me an other</button>
+			<img id="cat-img" src="" alt="cat-image">
 		</section>
 	</main>	
 	<script type="text/javascript" src="js/main.js"></script>
