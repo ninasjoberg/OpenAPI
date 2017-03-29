@@ -1,6 +1,6 @@
 let api = (function(){
 
-	//get data from OpenWeatherMap's api by longitude and latitude
+	//get data with current weather from OpenWeatherMap's api by longitude and latitude
 	const getWeatherInfoByLocation = function(lat, lon){
 		return fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promises
@@ -12,39 +12,39 @@ let api = (function(){
 	};
 
 
-	//get data from OpenWeatherMap's api by city-name
+	//get data with current weather from OpenWeatherMap's api by city-name
 	const getWeatherInfoByCity = function(city){
 		return fetch('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
-		.then(function(response){ //promises
+		.then(function(response){ 
 			return response.json();
 		})
-		.then(function(json){ //promises
+		.then(function(json){ 
 			console.log(json);
 			if(json.cod == 404 || json.cod == 504){
 				alert(`We could not find a city called ${city}`);
 			}
 			return json;
 		})
-		.catch(function(error){ //if error occurs
+		.catch(function(error){ 
 			console.log(error); 
 		});
 	};
 
 
-	//get data from the Times's api
+	//get data with news from the last 24hours from the Times's api
 	const getNews = function(){
 		return fetch('http://api.nytimes.com/svc/news/v3/content/all/all/24.json?limit=20&offset=0&api-key=9c59065f4cd7499089b7e2e4b6ef0374')
-		.then(function(response){ //promises
+		.then(function(response){ 
 			console.log(response);
 			return response.json();
 		})
-		.catch(function(error){
-			console.log(error); //loggar ut error om det skulle uppstå
+		.catch(function(error){ 
+			console.log(error); 
 		});
 	};
 
 
-	//get data from imugir's api
+	//get data with cat-gifs from imugir's api
 	const getCats = function(url){
 		return fetch(url || 'https://api.imgur.com/3/gallery/8pFPE.json',
 			{
@@ -52,7 +52,7 @@ let api = (function(){
 					'Authorization' : 'Client-ID 4086c2e8a306a5e'
 				}	
 			})
-		.then(function(response){ //promise
+		.then(function(response){ 
 			return response.json();
 		})
 		.then(function(json){
@@ -61,7 +61,7 @@ let api = (function(){
 			return filtered;
 		})
 		.catch(function(error){
-			console.log(error); //loggar ut error om det skulle uppstå
+			console.log(error); 
 		});
 	};
 
@@ -69,12 +69,14 @@ let api = (function(){
 	//get data with location from ipInfo
 	const getLocation = function(){
 		return fetch('http://ipinfo.io/geo')
-		.then(function(response){ //promises
+		.then(function(response){ 
 			console.log(response.json);
 			return response.json();
 		})
 		.catch(function(error){
-			console.log(error); //loggar ut error om det skulle uppstå
+			console.log(error); 
+			alert('Error. Tip: Shut down addblocker and try again');
+			presentation.showLoader();
 		});
 	};
 
@@ -133,7 +135,8 @@ let util = (function(){
 					presentation.showLoader();				
 				})
 				.catch(function(error){
-					console.log(error); //loggar ut error om det skulle uppstå
+					console.log(error); 
+					presentation.showLoader();
  				});
  			})		
 		}else{
@@ -146,7 +149,8 @@ let util = (function(){
 				presentation.showLoader();
 			})
 			.catch(function(error){
-				console.log(error); //loggar ut error om det skulle uppstå
+				console.log(error); 
+				presentation.showLoader();
 			});
 		}
 	}
@@ -193,14 +197,15 @@ let util = (function(){
 			presentation.showLoader();
 		})
 		.catch(function(error){
-			console.log(error); //loggar ut error om det skulle uppstå
+			console.log(error); 
+			presentation.showLoader();
  		});
 	}
 
 	//this function is called when the button 'give me an other' is pressed. I calls the function getCats and then pass that info 
 	//to the function that writes the info to the DOM.
 	function cats(){
-		const cat = api.getCats()
+		const cat = api.getCats();
 		presentation.showLoader();
 		cat.then(function(items){ 
 			const indexCat = randomIndex(items.length);
@@ -208,7 +213,8 @@ let util = (function(){
 			presentation.showLoader();
 		})
 		.catch(function(error){
-			console.log(error); //loggar ut error om det skulle uppstå
+			console.log(error); 
+			presentation.showLoader();
  		});
 	}
 
