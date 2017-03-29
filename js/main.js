@@ -1,44 +1,41 @@
-//Times Newswire API: 9c59065f4cd7499089b7e2e4b6ef0374
-//http://api.nytimes.com/svc/news/{version}/content
-
-
 let api = (function(){
 
-	//get data from OpenWeatherMap's api
+	//get data from OpenWeatherMap's api by longitude and latitude
 	const getWeatherInfoByLocation = function(lat, lon){
 		return fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promises
 			return response.json();
 		})
-		.catch(function(error){
-			console.log(error); //loggar ut error om det skulle uppstå
+		.catch(function(error){ //if error occurs
+			console.log(error); 
 		});
 	};
 
 
-	//get data from OpenWeatherMap's api
+	//get data from OpenWeatherMap's api by city-name
 	const getWeatherInfoByCity = function(city){
 		return fetch('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promises
 			return response.json();
 		})
-		.then(function(json){ //promises , kan döpas till vad som helst
+		.then(function(json){ //promises
 			console.log(json);
 			if(json.cod == 404 || json.cod == 504){
 				alert(`We could not find a city called ${city}`);
 			}
 			return json;
 		})
-		.catch(function(error){
-			console.log(error); //loggar ut error om det skulle uppstå
+		.catch(function(error){ //if error occurs
+			console.log(error); 
 		});
 	};
 
 
 	//get data from the Times's api
 	const getNews = function(){
-		return fetch('http://api.nytimes.com/svc/news/v3/content/iht/all.json?limit=20&offset=0&api-key=9c59065f4cd7499089b7e2e4b6ef0374')
+		return fetch('http://api.nytimes.com/svc/news/v3/content/all/all/24.json?limit=20&offset=0&api-key=9c59065f4cd7499089b7e2e4b6ef0374')
 		.then(function(response){ //promises
+			console.log(response);
 			return response.json();
 		})
 		.catch(function(error){
@@ -48,7 +45,7 @@ let api = (function(){
 
 
 	//get data from imugir's api
-	const getCat = function(url){
+	const getCats = function(url){
 		return fetch(url || 'https://api.imgur.com/3/gallery/8pFPE.json',
 			{
 				headers: {
@@ -68,40 +65,26 @@ let api = (function(){
 		});
 	};
 
-/*	
-		//get data from GoogleMap's api
-		const getCat = function(){
-		return fetch('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=2faac0eaa322a95d1be792ea387dbd9b&per_page=1&tags="cats"&format=json')
+
+	//get data with location from ipInfo
+	const getLocation = function(){
+		return fetch('http://ipinfo.io/geo')
 		.then(function(response){ //promises
-			console.log(response);
-			return response;
-		})
-		.catch(function(error){
-			console.log(error); //loggar ut error om det skulle uppstå
-		});
-	};
-*/
-/*
-	//get data from OpenWeatherMap's api
-	const getMap = function(){
-		fetch('https://tile.openweathermap.org/map/Temperature/59/17/3.png?appid=86ebed830d86568ba6fe8e800be02b58')
-		.then(function(response){ //promise
+			console.log(response.json);
 			return response.json();
 		})
 		.catch(function(error){
 			console.log(error); //loggar ut error om det skulle uppstå
 		});
 	};
-*/
 
-
+	
 	return{
 		getWeatherInfoByLocation: getWeatherInfoByLocation,
 		getWeatherInfoByCity: getWeatherInfoByCity,
-		//showMap: showMap,
-		//getMap: getMap,
 		getNews: getNews,
-		getCat: getCat,
+		getCats: getCats,
+		getLocation: getLocation,
 	};
 
 
@@ -111,38 +94,43 @@ let api = (function(){
 
 
 let util = (function(){
-	document.getElementById('weather-button').addEventListener('click', getWeather);
-	document.getElementById('news-button').addEventListener('click', getUpdateNews);
-	document.getElementById('cat-button').addEventListener('click', getCatOfToday);
+	
+	document.getElementById('weather-button').addEventListener('click', weather);
+	document.getElementById('news-button').addEventListener('click', news);
+	document.getElementById('cat-button').addEventListener('click', cats);
 
-	//get the users location
-	function getLocation(){
+	//creat a new promise to get location before next request
+	function location(){
 		const promise = new Promise((resolve, reject) =>{
-			navigator.geolocation.getCurrentPosition((res) => { 
-			    const latitude = (res.coords.latitude);
-			    const longitude = (res.coords.longitude);
+			const location = api.getLocation();
+			location.then(function(json){
+		    	const latitude = (json.loc.substring(0,7));
+		    	const longitude = (json.loc.substring(8,15));
 			    resolve({
 			    	lat: latitude,
 				   	lon: longitude,
 				});
-			});
+			});	
 		});
 		return promise;
 	}
 
-
-	function getWeather(){
+	//this function is called when the button 'get weather' is pressed. If name of location is not given by the user, the function location
+	//is called. Then the 'getWeatherInfoByLocation' is called with the info from location as parameter. Then that info is passed to the 
+	//function that writes the info to the DOM. 
+	//If the name of location is given by the user the function 'location' will not be called.  
+	function weather(){
 		const cityInput = document.getElementById('add-city').value;
 		if(!cityInput){
 			 let loader = document.getElementById('loader');
-   			 loader.classList.toggle('visibility');
-			getLocation().then((data) => {
+   			 presentation.showLoader();
+			location().then((data) => {
 				const weaterLoc = api.getWeatherInfoByLocation(data.lat, data.lon);
 				weaterLoc.then(function(json){
-					presentation.infoToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
+					presentation.weatherToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 					presentation.iconToDom(json.weather[0].icon);
 					activityTip(json.weather[0].description, json.main.temp, json.wind.speed);
-					loader.classList.toggle('visibility');
+					presentation.showLoader();				
 				})
 				.catch(function(error){
 					console.log(error); //loggar ut error om det skulle uppstå
@@ -150,10 +138,12 @@ let util = (function(){
  			})		
 		}else{
 			const weather = api.getWeatherInfoByCity(cityInput);
+			presentation.showLoader();
 			weather.then(function(json){
-				presentation.infoToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
+				presentation.weatherToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 				presentation.iconToDom(json.weather[0].icon);
 				activityTip(json.weather[0].description, json.main.temp, json.wind.speed);
+				presentation.showLoader();
 			})
 			.catch(function(error){
 				console.log(error); //loggar ut error om det skulle uppstå
@@ -162,7 +152,7 @@ let util = (function(){
 	}
 
 
-	//show activity based on weather
+	//activity based on weather
 	function activityTip(weather, temp, wind){
 		let text = '';
 		if(temp > 9 && temp < 19 && weather == 'clear sky' && wind < 5){
@@ -190,32 +180,47 @@ let util = (function(){
 	}
 
 
-	function getUpdateNews(){
+	//this function is called when the button 'update news' is pressed. I calls the function getNews and then pass that info 
+	//to the function that writes the info to the DOM. 
+	function news(){
 		const news = api.getNews(); 
+		console.log(news);
+		presentation.showLoader();
 		news.then(function(json){
 			console.log(json);
 			const indexNews = randomIndex(20);
 			presentation.newsToDom(json.results[indexNews]);
+			presentation.showLoader();
 		})
+		.catch(function(error){
+			console.log(error); //loggar ut error om det skulle uppstå
+ 		});
 	}
+
+	//this function is called when the button 'give me an other' is pressed. I calls the function getCats and then pass that info 
+	//to the function that writes the info to the DOM.
+	function cats(){
+		const cat = api.getCats()
+		presentation.showLoader();
+		cat.then(function(items){ 
+			const indexCat = randomIndex(items.length);
+			presentation.catToDom(items[indexCat].link);
+			presentation.showLoader();
+		})
+		.catch(function(error){
+			console.log(error); //loggar ut error om det skulle uppstå
+ 		});
+	}
+
 
 	function randomIndex(range){
 		return Math.floor((Math.random() * range) + 1);
 	}
 
 
-	function getCatOfToday(){
-		const cat = api.getCat()
-		cat.then(function(items){ 
-			const indexCat = randomIndex(items.length);
-			console.log(indexCat);
-			presentation.catToDom(items[indexCat].link)
-		})
-	}
-
 
 	return{
-		getWeather: getWeather,
+		randomIndex: randomIndex,
 	};
 
 })();	
@@ -225,11 +230,14 @@ let util = (function(){
 
 let presentation = (function(){		
 
-	function infoToDom(location, weather, temp, wind){
-		const locationDiv = document.getElementById('location-div');
-		locationDiv.innerHTML= location;
-		const weatherDiv = document.getElementById('weather-div');
-		weatherDiv.innerHTML = `${weather} ${temp}°C ${wind}m/s`;
+	function showLoader(){
+		loader.classList.toggle('visibility');
+	}
+
+
+	function weatherToDom(location, weather, temp, wind){
+		document.getElementById('location-div').innerHTML= location;
+		document.getElementById('weather-div').innerHTML = `${weather} ${temp}°C ${wind}m/s`;
 	}
 
 
@@ -239,20 +247,17 @@ let presentation = (function(){
 
 
 	function activityToDom(text){
-		const activity = document.getElementById('activity');
-		activity.innerHTML = `It's a great day ${text}`;
+		document.getElementById('activity').innerHTML = `It's a great day ${text}`;
 	}
 
 
 	function newsToDom(news){
-		const article = document.getElementById('article');
-		article.innerHTML = news.abstract; 
-		const heading = document.getElementById('heading');
-		heading.innerHTML = news.title;
-		const date = document.getElementById('date');
-		date.innerHTML = news.updated_date;
-		document.getElementById('link').href='news.url';
+		document.getElementById('article').innerHTML = news.abstract;
+		document.getElementById('heading').innerHTML = news.title;;
+		document.getElementById('date').innerHTML = news.updated_date;
+		document.getElementById('link').href = news.url;
 	}
+
 
 	function catToDom(cat){
 		document.getElementById('cat-img').src=cat;
@@ -260,11 +265,12 @@ let presentation = (function(){
 
 
 	return{
-		infoToDom: infoToDom,
+		weatherToDom: weatherToDom,
 		iconToDom: iconToDom,
 		activityToDom: activityToDom,
 		newsToDom: newsToDom,
-		catToDom: catToDom
+		catToDom: catToDom,
+		showLoader: showLoader,
 	};
 
 })();	
@@ -272,9 +278,10 @@ let presentation = (function(){
 
 
 
+//init info for the page
 const initialWeather = api.getWeatherInfoByCity('Stockholm');
 initialWeather.then(function(json){
-	presentation.infoToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
+	presentation.weatherToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 	presentation.iconToDom(json.weather[0].icon);
 })
 
@@ -285,18 +292,11 @@ initialNews.then(function(json){
 })
 
 
-const initialCat = api.getCat();
+const initialCat = api.getCats();
 initialCat.then(function(json){
-	console.log(json);
-	presentation.catToDom(json[0].link)
+	const indexCat = util.randomIndex(json.length);
+	presentation.catToDom(json[indexCat].link);
 })
-
-
-
-
-
-
-
 
 
 
