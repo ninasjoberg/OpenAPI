@@ -10,22 +10,48 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
-	<div id ="loader" class="visibility"></div>
-	<h1>Activity tips!</h1>
-	<main class="maincontent">
-		<div class="info-text">
-			<p>Write a location in the inputfiled and press the button '"get weather". Or just press the button and you will get the weather based on you actual location. 
-			</p>	
-		</div>	
-		<input id="add-city" type="text" value="" placeholder=" Location" required="" autofocus></input>
-		<button id="weather">get weather</button>
-		<h3 id="weather-div">City - Weather - °C</h3>
-		<img id="icon" src="" alt="weather-icon">
-		<p id="activity">It's always a great day for programming!</p>
-		<section class="mapp-buttons">
-			<button id="map-button">get map</button>
-			<div id="map"></div>
-			<!--<img id="map" src=""> -->
+	<header class="white">
+		<figure id ="loader" class="visibility"></figure>
+		<h1>Good Morning</h1>
+		<p>The best way to start your day!</p>
+	</header>
+	<main class="maincontent row">
+		<section class="grey column col-lg-4 col-md-12">
+			<h3>Current weather</h3>
+			<section class="info-text">
+				<p>Write a location in the inputfiled and press the button "get weather". Or just press the button and you will get the weather based on you actual location. 
+				</p>	
+			</section>	
+			<input id="add-city" class="hover" type="text" value="" placeholder=" Location" required="" autofocus></input>
+			<button id="weather-button" type="button">Get weather</button>
+			<h3 id="location-div"></h3>
+			<h4 id="weather-div"></h4>
+			<img id="icon" src="" alt="weather-icon">
+			<p id="activity">It's always a great day for programming!</p>
+		</section>
+		<section class="news column col-lg-4 col-md-12">
+			<h3>Latest news:</h3>
+			<bdi class="together">
+				<time id="date"></time>
+				<p class="text">the Times</p>
+			</bdi>
+			<article class ="area">
+				<h4 id="heading"></h4>
+				<div id="article"></div>
+				<a id="link" href="" target="_balnk">Link to article, The New York Times</a>
+			</article>
+			<button id="news-button" type="button">Update news</button>
+		</section>
+		<section class="grey column col-lg-4 col-md-12">
+			<h3>Cat of the day</h3>
+			<section class="info-text">
+				<p>Tired of boring weather and bad news? Take a look at this cat instead. Hope this will give you a good start of the day!
+				</p>	
+			</section>	
+			<button id="cat-button" type="button">Give me an other</button>
+			<section class="container">
+				<img id="cat-img" src="" alt="cat-image">
+			</section>
 		</section>
 	</main>	
 	<script type="text/javascript" src="js/main.js"></script>
