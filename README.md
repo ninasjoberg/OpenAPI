@@ -31,6 +31,7 @@ Design pattern:
 - Openweathermaps api - för att få ut info om vädret: http://openweathermap.org/api
 - The New Yourk Times api -  för att få ut nyheter: https://developer.nytimes.com/
 - imgurs api - för att hämta ut bilder på katter: https://api.imgur.com/
+- ipinfo - för att hämta ut användarens position: http://ipinfo.io/geo
 
 ## Arbetsprocess:
 
@@ -46,4 +47,5 @@ Jag tycker personligen att applikationen gör sig bäst i mobilen, dessvärre ha
 - Lägga till exempelvis läget i tågtrafiken och på vägarna baserat på vart användaren befinner sig
 - Bygga på den ursprungliga iden om att ge förslag på aktiviteter baserat på väder
 - Jobba vidare på designen i laptopvy, så att sidan känns mindre rörig. 
+- Göra en egen inforuta där felmeddelanden, info osv kan visas. Istället för att använda den inbyggda 'alert'.
 

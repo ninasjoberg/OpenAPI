@@ -1,5 +1,15 @@
+@font-face {
+    font-family: 'roboto_condensedlight';
+    src: url('../Fonts/robotocondensed-light-webfont.woff2') format('woff2'),
+         url('../Fonts/robotocondensed-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
-$primary-color: #8fd6b3; 
+$paragraf-font: 'roboto_condensedlight';
+
+
+$primary-color: #b9dfbf; 
 $secondary-color: #ff80d5;
 $third-color: #f4f4f4;
 
@@ -26,6 +36,12 @@ header{
 
 h1{
 	font-size: 3rem;
+}
+
+p{
+	font-family: $paragraf-font;
+	font-size: 1rem;
+	letter-spacing: 0.8px;
 }
 
 input{

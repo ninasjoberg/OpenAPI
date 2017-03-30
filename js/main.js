@@ -1,6 +1,6 @@
 let api = (function(){
 
-	//get data with current weather from OpenWeatherMap's api by longitude and latitude
+	//get data with current weather from OpenWeatherMap's api by longitude and latitude. Return a promise.
 	const getWeatherInfoByLocation = function(lat, lon){
 		return fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ //promises
@@ -12,7 +12,7 @@ let api = (function(){
 	};
 
 
-	//get data with current weather from OpenWeatherMap's api by city-name
+	//get data with current weather from OpenWeatherMap's api by city-name. Return a promise.
 	const getWeatherInfoByCity = function(city){
 		return fetch('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
 		.then(function(response){ 
@@ -31,7 +31,7 @@ let api = (function(){
 	};
 
 
-	//get data with news from the last 24hours from the Times's api
+	//get data with news from the last 24hours from the Times's api. Return a promise.
 	const getNews = function(){
 		return fetch('http://api.nytimes.com/svc/news/v3/content/all/all/24.json?limit=20&offset=0&api-key=9c59065f4cd7499089b7e2e4b6ef0374')
 		.then(function(response){ 
@@ -44,7 +44,7 @@ let api = (function(){
 	};
 
 
-	//get data with cat-gifs from imugir's api
+	//get data with cat-gifs from imugir's api. Return a promise.
 	const getCats = function(url){
 		return fetch(url || 'https://api.imgur.com/3/gallery/8pFPE.json',
 			{
@@ -66,7 +66,7 @@ let api = (function(){
 	};
 
 
-	//get data with location from ipInfo
+	//get data with location from ipInfo. Return a promise.
 	const getLocation = function(){
 		return fetch('http://ipinfo.io/geo')
 		.then(function(response){ 
@@ -188,10 +188,8 @@ let util = (function(){
 	//to the function that writes the info to the DOM. 
 	function news(){
 		const news = api.getNews(); 
-		console.log(news);
 		presentation.showLoader();
 		news.then(function(json){
-			console.log(json);
 			const indexNews = randomIndex(20);
 			presentation.newsToDom(json.results[indexNews]);
 			presentation.showLoader();
