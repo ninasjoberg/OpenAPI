@@ -11,7 +11,6 @@ let api = (function(){
 		});
 	};
 
-
 	//get data with current weather from OpenWeatherMap's api by city-name. Return a promise.
 	const getWeatherInfoByCity = function(city){
 		return fetch('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&APPID=86ebed830d86568ba6fe8e800be02b58')
@@ -30,6 +29,14 @@ let api = (function(){
 		});
 	};
 
+	//initializer for weather
+	function initWeather(city){
+		getWeatherInfoByCity(city).then(function(json){
+			presentation.weatherToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
+			presentation.iconToDom(json.weather[0].icon);
+		})
+	}
+
 
 	//get data with news from the last 24hours from the Times's api. Return a promise.
 	const getNews = function(){
@@ -42,6 +49,13 @@ let api = (function(){
 			console.log(error); 
 		});
 	};
+
+	//initializer for news
+	function initNews(){
+		getNews().then(function(json){
+			presentation.newsToDom(json.results[0]);
+		})
+	}
 
 
 	//get data with cat-gifs from imugir's api. Return a promise.
@@ -65,6 +79,14 @@ let api = (function(){
 		});
 	};
 
+	//initializer for cats
+	function initCat(){
+		getCats().then(function(json){
+			const indexCat = util.randomIndex(json.length);
+			presentation.catToDom(json[indexCat].link);
+		})
+	}
+
 
 	//get data with location from ipInfo. Return a promise.
 	const getLocation = function(){
@@ -87,6 +109,9 @@ let api = (function(){
 		getNews: getNews,
 		getCats: getCats,
 		getLocation: getLocation,
+		initWeather: initWeather,
+		initNews: initNews,
+		initCat: initCat,
 	};
 
 
@@ -104,8 +129,7 @@ let util = (function(){
 	//creat a new promise to get location before next request
 	function location(){
 		const promise = new Promise((resolve, reject) =>{
-			const location = api.getLocation();
-			location.then(function(json){
+			api.getLocation().then(function(json){
 		    	const latitude = (json.loc.substring(0,7));
 		    	const longitude = (json.loc.substring(8,15));
 			    resolve({
@@ -127,8 +151,7 @@ let util = (function(){
 			 let loader = document.getElementById('loader');
    			 presentation.showLoader();
 			location().then((data) => {
-				const weaterLoc = api.getWeatherInfoByLocation(data.lat, data.lon);
-				weaterLoc.then(function(json){
+				api.getWeatherInfoByLocation(data.lat, data.lon).then(function(json){
 					presentation.weatherToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 					presentation.iconToDom(json.weather[0].icon);
 					activityTip(json.weather[0].description, json.main.temp, json.wind.speed);
@@ -140,9 +163,8 @@ let util = (function(){
  				});
  			})		
 		}else{
-			const weather = api.getWeatherInfoByCity(cityInput);
 			presentation.showLoader();
-			weather.then(function(json){
+			api.getWeatherInfoByCity(cityInput).then(function(json){
 				presentation.weatherToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
 				presentation.iconToDom(json.weather[0].icon);
 				activityTip(json.weather[0].description, json.main.temp, json.wind.speed);
@@ -187,9 +209,8 @@ let util = (function(){
 	//this function is called when the button 'update news' is pressed. I calls the function getNews and then pass that info 
 	//to the function that writes the info to the DOM. 
 	function news(){
-		const news = api.getNews(); 
 		presentation.showLoader();
-		news.then(function(json){
+		api.getNews().then(function(json){
 			const indexNews = randomIndex(20);
 			presentation.newsToDom(json.results[indexNews]);
 			presentation.showLoader();
@@ -203,9 +224,8 @@ let util = (function(){
 	//this function is called when the button 'give me an other' is pressed. I calls the function getCats and then pass that info 
 	//to the function that writes the info to the DOM.
 	function cats(){
-		const cat = api.getCats();
 		presentation.showLoader();
-		cat.then(function(items){ 
+		api.getCats().then(function(items){ 
 			const indexCat = randomIndex(items.length);
 			presentation.catToDom(items[indexCat].link);
 			presentation.showLoader();
@@ -281,28 +301,9 @@ let presentation = (function(){
 
 
 
-
-//init info for the page
-const initialWeather = api.getWeatherInfoByCity('Stockholm');
-initialWeather.then(function(json){
-	presentation.weatherToDom(json.name, json.weather[0].description, json.main.temp, json.wind.speed);
-	presentation.iconToDom(json.weather[0].icon);
-})
-
-
-const initialNews = api.getNews();
-initialNews.then(function(json){
-	presentation.newsToDom(json.results[0]);
-})
-
-
-const initialCat = api.getCats();
-initialCat.then(function(json){
-	const indexCat = util.randomIndex(json.length);
-	presentation.catToDom(json[indexCat].link);
-})
-
-
+api.initWeather('Stockholm');
+api.initNews();
+api.initCat();
 
 
 

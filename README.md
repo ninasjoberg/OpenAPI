@@ -5,6 +5,7 @@ Kurs: JavaScript 2, Nackademin ht 16 - vt17
 
 
 Länk till appen/sidan: http://openapi.surge.sh/
+
 Länk till repo: https://github.com/ninasjoberg/Open_api
 
 ## Uppgift:
@@ -29,9 +30,9 @@ Design pattern:
 ## Dessa api:er har använts:
 
 - Openweathermaps api - för att få ut info om vädret: http://openweathermap.org/api
-- The New Yourk Times api -  för att få ut nyheter: https://developer.nytimes.com/
-- imgurs api - för att hämta ut bilder på katter: https://api.imgur.com/
-- ipinfo - för att hämta ut användarens position: http://ipinfo.io/geo
+- The New Yourk Times api -  för att få ut nyheter: https://developer.nytimes.com
+- imgurs api - för att hämta ut bilder på katter: https://api.imgur.com
+- ipinfo - för att hämta ut användarens position: http://ipinfo.io
 
 ## Arbetsprocess:
 
