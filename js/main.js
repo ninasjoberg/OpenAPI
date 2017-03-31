@@ -301,7 +301,7 @@ let presentation = (function(){
 
 
 
-api.initWeather();
+api.initWeather('Stockholm');
 api.initNews();
 api.initCat();
 
