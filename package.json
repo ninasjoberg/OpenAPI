@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "node-sass main.scss css/main.css", 
+    "compile": "node-sass main.scss css/main.css",
     "compile:watch": "node-sass --watch sass/main.scss css/main.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/ninasjoberg/OpenAPI/issues"
   },
-  "homepage": "https://github.com/ninasjoberg/OpenAPI#readme"
+  "homepage": "https://github.com/ninasjoberg/OpenAPI#readme",
+  "dependencies": {
+    "whatwg-fetch": "^2.0.3"
+  }
 }
